@@ -6,7 +6,13 @@ export default props => {
     function renderLinks(){
         const contacts = props.listContacts;
         return contacts.map((people) => (
-            <a key={people._id} href="#" className="list-group-item list-group-item-action">{people.name}</a>
+            <a key={people._id} href="#" className="list-group-item list-group-item-action flex-column align-items-start">
+                <div className="d-flex w-100 justify-content-between">
+                    <h5 className="mb-1">{people.name}</h5>
+                    <button onClick={()=> props.deleteContacts(people)} type="button" className="btn btn-outline-danger">Delete</button>
+                </div>
+                <small>{people.telphone}</small>
+            </a>
         ))
     }
     return (

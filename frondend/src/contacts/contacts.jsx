@@ -5,8 +5,9 @@ import Grid from '../template/grid'
 import axios from 'axios'
 import If from '../template/if'
 import FloatButton from '../template/floatButton'
-import AddContact from './contactsAdd'
 import ContactsAdd from './contactsAdd';
+
+import Modal from '../template/modal'
 
 const URL = 'http://localhost:3003/api/contacts';
 
@@ -27,6 +28,7 @@ export default class Contacts extends Component {
         this.showAddView = this.showAddView.bind(this)
         this.hangleChangeFormAdd = this.hangleChangeFormAdd.bind(this)
         this.addContact = this.addContact.bind(this)
+        this.deleteContacts = this.deleteContacts.bind(this)
 
         this.listContacts();
     }    
@@ -48,6 +50,11 @@ export default class Contacts extends Component {
             this.setState({...this.state, contacts:response.data})    
         )
         .catch(error=>console.log(error))
+    }
+
+    deleteContacts(contact){
+        axios.delete(`${URL}/${contact._id}`)
+            .then(resp => this.listContacts())
     }
 
     details(){
@@ -88,7 +95,11 @@ export default class Contacts extends Component {
                         search={this.search}
                         onChange={this.hangleChange} 
                         stringSearch={this.state.stringSearch} />
-                    <ContactsList details={this.details} listContacts={this.state.contacts} />
+                    <ContactsList 
+                        details={this.details} 
+                        listContacts={this.state.contacts} 
+                        deleteContacts={this.deleteContacts}
+                    />
                     <FloatButton iconType="fa fa-plus" addContact={this.showAddView}/>
                 </Grid>
                 <Grid cols='12 6'>
@@ -104,6 +115,7 @@ export default class Contacts extends Component {
                             endereco={this.state.endereco}/>
                     </If>
                 </Grid>
+                <Modal title="Deletar Contato" />
             </div>
         )
     }
